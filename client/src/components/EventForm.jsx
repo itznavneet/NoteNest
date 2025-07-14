@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./EventForm.css";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../config";
 
 export default function EventForm({ handleClose }) {
 
@@ -20,7 +21,7 @@ export default function EventForm({ handleClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/events/add', event, {
+            await axios.post(`${BASE_URL}/api/events/add`, event, {
                 headers: {
                     Authorization: token
                 }

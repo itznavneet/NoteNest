@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
   import {toast } from 'react-toastify';
   import { useAuth } from "../context/AuthContext";
   import {z} from 'zod'
+  import { BASE_URL } from "../config";
+
 
 // ✅ Define login validation schema
 const loginSchema = z.object({
@@ -30,7 +32,7 @@ const loginSchema = z.object({
       return;
   }
   try {
-    const res = await axios.post("http://localhost:5000/api/auth/login", form);
+    const res = await axios.post(`${BASE_URL}/api/auth/login`, form);
     const { token, user } = res.data;
 
     login(user, token); // ✅ use context

@@ -1,0 +1,1 @@
+export const BASE_URL = "https://notenest-i3nl.onrender.com";

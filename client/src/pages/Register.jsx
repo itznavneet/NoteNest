@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { z } from "zod";
 import { useAuth } from "../context/AuthContext";
+import { BASE_URL } from "../config";
+
 
 // Zod validation schema
 const registerSchema = z.object({
@@ -39,7 +41,7 @@ export default function Register() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", form);
+      const res = await axios.post(`${BASE_URL}/api/auth/register`, form);
       const { token, user } = res.data;
 
       login(user, token); // store in context

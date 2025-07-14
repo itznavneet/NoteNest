@@ -5,6 +5,8 @@ import EventForm from "../components/EventForm";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
+import { BASE_URL } from "../config";
+
 
 export default function Home() {
 
@@ -20,7 +22,7 @@ export default function Home() {
 
  const handleDelete = async (id) => {
   try {
-    await axios.delete(`http://localhost:5000/api/events/delete/${id}`, {
+    await axios.delete(`${BASE_URL}/api/events/delete/${id}`, {
       headers: { Authorization: token },
     });
     toast.success("Event deleted successfully")
@@ -34,7 +36,7 @@ export default function Home() {
 
   const getEvents = async () => {
     try {
-      const events = await axios.get('http://localhost:5000/api/events/my-events', {
+      const events = await axios.get(`${BASE_URL}/api/events/my-events`, {
         headers: {
           Authorization: token
         }
