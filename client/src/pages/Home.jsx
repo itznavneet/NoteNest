@@ -13,32 +13,34 @@ export default function Home() {
   const [showForm, setShowForm] = useState(false)
   const [username, setUsername] = useState("")
   const [events, setEvents] = useState([]);
-  
-  const {token, user}= useAuth()
+
+  const { token, user } = useAuth()
 
   const handleClose = () => {
     setShowForm(false)
   }
 
- const handleDelete = async (id) => {
-  try {
-    await axios.delete(`${BASE_URL}/api/events/delete/${id}`, {
-      headers: { Authorization: token },
-    });
-    toast.success("Event deleted successfully")
-    getEvents(); // Refresh the list
-  } catch (error) {
-    console.error("Delete failed", error);
-    toast.error("Failed to delete event.");
-  }
-};
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}/api/events/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+      toast.success("Event deleted successfully")
+      getEvents(); // Refresh the list
+    } catch (error) {
+      console.error("Delete failed", error);
+      toast.error("Failed to delete event.");
+    }
+  };
 
 
   const getEvents = async () => {
     try {
       const events = await axios.get(`${BASE_URL}/api/events/my-events`, {
         headers: {
-          Authorization: token
+          Authorization: `Bearer ${token}`
         }
       })
       setEvents(events.data)
@@ -48,12 +50,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    getEvents()
-  }, [showForm])
+    if (token) getEvents()
+  }, [token, showForm])
 
- useEffect(() => {
-  if (user?.name) setUsername(user.name);
-}, [token]);
+  useEffect(() => {
+    if (user?.name) setUsername(user.name);
+  }, [token]);
 
 
 
@@ -74,31 +76,31 @@ export default function Home() {
         {events.length === 0 ? (
           <p>No events found.</p>
         ) : (
-<ul>
-  {events.map((event) => {
-    const isPast = new Date(event.date) < new Date(); // compare with current date
+          <ul>
+            {events.map((event) => {
+              const isPast = new Date(event.date) < new Date(); // compare with current date
 
-    return (
-      <li key={event._id} className={isPast ? "event past" : "event upcoming"}>
-        <div className="event-text">
-          <strong>{event.type}</strong> on <em>{event.date}</em><br />
-          <span>{event.remark}</span>
-        </div>
-        <button
-          className="delete-btn"
-          onClick={() => handleDelete(event._id)}
-        >
-          X
-        </button>
-      </li>
-    );
-  })}
-</ul>
+              return (
+                <li key={event._id} className={isPast ? "event past" : "event upcoming"}>
+                  <div className="event-text">
+                    <strong>{event.type}</strong> on <em>{event.date}</em><br />
+                    <span>{event.remark}</span>
+                  </div>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(event._id)}
+                  >
+                    X
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
 
 
         )}
       </div>
-<Footer/>
+      <Footer />
     </div>
   );
 }

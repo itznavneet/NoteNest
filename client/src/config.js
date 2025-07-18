@@ -1,1 +1,1 @@
-export const BASE_URL = "https://notenest-i3nl.onrender.com";
+export const BASE_URL = "http://localhost:5000";
