@@ -6,15 +6,16 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  
+useEffect(() => {
+  const storedUser = localStorage.getItem("event-noter-user");
+  const storedToken = localStorage.getItem("event-noter-token");
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("event-noter-user");
-    const storedToken = localStorage.getItem("event-noter-token");
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
-    }
-  }, []);
+  if (storedUser && storedToken) {
+    setUser(JSON.parse(storedUser));
+    setToken(storedToken);
+  }
+}, []);
 
   const login = (user, token) => {
     localStorage.setItem("event-noter-user", JSON.stringify(user));
