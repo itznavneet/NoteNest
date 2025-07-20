@@ -9,11 +9,12 @@ router.get('/', async(req, res)=>{
 
 router.post('/add',auth, async (req, res) => {
     try {
-        const {date, type, remark}= req.body
+        const {date, time, type, remark}= req.body
 
     const newEvent = await Event.create({
         user: req.user,
         date,
+        time,
         type, 
         remark
     })

@@ -10,6 +10,10 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  time: {
+    type: String,
+    required: true
+  },
   type: {
     type: String,
     enum: ["Birthday", "Anniversary", "Reminder", "Meeting", "Other"],

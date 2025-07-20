@@ -7,27 +7,25 @@ import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import { BASE_URL } from "../config";
 
-
 export default function Home() {
-
-  const [showForm, setShowForm] = useState(false)
-  const [username, setUsername] = useState("")
+  const [showForm, setShowForm] = useState(false);
+  const [username, setUsername] = useState("");
   const [events, setEvents] = useState([]);
 
-  const { token, user } = useAuth()
+  const { token, user } = useAuth();
 
   const handleClose = () => {
-    setShowForm(false)
-  }
+    setShowForm(false);
+  };
 
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${BASE_URL}/api/events/delete/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
-      toast.success("Event deleted successfully")
+      toast.success("Event deleted successfully");
       getEvents(); // Refresh the list
     } catch (error) {
       console.error("Delete failed", error);
@@ -35,29 +33,27 @@ export default function Home() {
     }
   };
 
-
   const getEvents = async () => {
     try {
-      const events = await axios.get(`${BASE_URL}/api/events/my-events`, {
+      const response = await axios.get(`${BASE_URL}/api/events/my-events`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      setEvents(events.data)
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setEvents(response.data);
     } catch (error) {
-      console.error("Error fetching events", err);
+      console.error("Error fetching events", error);
+      toast.error("Could not load events.");
     }
-  }
+  };
 
   useEffect(() => {
-    if (token) getEvents()
-  }, [token, showForm])
+    if (token) getEvents();
+  }, [token, showForm]);
 
   useEffect(() => {
     if (user?.name) setUsername(user.name);
-  }, [token]);
-
-
+  }, [user]);
 
   return (
     <div className="home-container">
@@ -78,12 +74,15 @@ export default function Home() {
         ) : (
           <ul>
             {events.map((event) => {
-              const isPast = new Date(event.date) < new Date(); // compare with current date
+              // Combine date and time to check if it's past
+              const eventDateTime = new Date(`${event.date} ${event.time}`);
+              const now = new Date();
+              const isPast = eventDateTime < now;
 
               return (
                 <li key={event._id} className={isPast ? "event past" : "event upcoming"}>
                   <div className="event-text">
-                    <strong>{event.type}</strong> on <em>{event.date}</em><br />
+                    <strong>{event.type}</strong> on <em>{event.date}</em> at <em>{event.time}</em><br />
                     <span>{event.remark}</span>
                   </div>
                   <button
@@ -96,8 +95,6 @@ export default function Home() {
               );
             })}
           </ul>
-
-
         )}
       </div>
       <Footer />
