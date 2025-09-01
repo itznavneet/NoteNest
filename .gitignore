@@ -1,3 +1,2 @@
-# Example
+# Ignore server env
 server/.env
-client/src/config.js
