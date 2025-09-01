@@ -1,2 +1,6 @@
-# Ignore server env
+# server sensitive files
 server/.env
+
+# Node modules (optional but recommended)
+server/node_modules
+client/node_modules
