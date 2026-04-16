@@ -6,11 +6,13 @@ const authRoutes= require('./routers/auth-route')
 const eventRoutes= require('./routers/event-route')
 const cors= require('cors')
 
-const corsOptions= {
-origin: ["http://localhost:5173", "https://notenest-frontend-utsu.onrender.com/"],
-  method: "GET, POST, PUT, DELETE, PATCH, HEAD",
-  credentials: true
-}
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://notenest-frontend-utsu.onrender.com"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json())
 app.use(cors(corsOptions))
